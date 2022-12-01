@@ -49,6 +49,7 @@ const sequelize = new Sequelize(process.env.connection, {
       ).constructor_arguments;
     }
     try {
+      console.log("contractData is", contracData);
       const message_result = await axios({
         method: "post",
         url: process.env.url,
