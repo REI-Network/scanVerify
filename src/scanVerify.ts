@@ -27,10 +27,11 @@ const sequelize = new Sequelize(process.env.connection, {
     optimization: any;
     optimizationRuns?: any;
     constructorArguments?: any;
+    verified_via_sourcify?: any;
   };
 
   const index = Number(process.argv[2]);
-  for (let i = index; i < results.length; i++) {
+  for (let i = index; i <= results.length; i++) {
     const contracData: datatype = {
       addressHash: "0x" + (results[i] as any).address_hash.toString("hex"),
       compilerVersion: (results[i] as any).compiler_version,
@@ -48,8 +49,14 @@ const sequelize = new Sequelize(process.env.connection, {
         results[i] as any
       ).constructor_arguments;
     }
+    if ((results[i] as any).verified_via_sourcify) {
+      contracData.constructorArguments = (
+        results[i] as any
+      ).verified_via_sourcify;
+    }
     try {
-      console.log("contractData is", contracData);
+      console.log("contractData address is ", contracData.addressHash);
+      console.log(results[i]);
       const message_result = await axios({
         method: "post",
         url: process.env.url,
